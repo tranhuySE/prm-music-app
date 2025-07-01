@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Music-app</string>
+    <string name="ten_dang_nhap">Ten dang nhap</string>
+    <string name="mat_khau">Mat khau</string>
+    <string name="xac_nhan_mat_khau">Xac nhan mat khau</string>
+    <string name="dong_y">Dong y</string>
+    <string name="dang_ki">Dang ki</string>
 </resources>
