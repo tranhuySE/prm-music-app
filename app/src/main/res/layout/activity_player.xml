@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootLayout"
+    android:background="#1E1E1E"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="24dp"
+    android:paddingRight="24dp"
+    android:paddingTop="40dp"
+    android:gravity="center_horizontal">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="24dp">
+
+        <ImageView
+            android:id="@+id/btn_Back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Back"
+            app:tint="@color/main_bg" />
+
+        <TextView
+            android:id="@+id/tv_AppTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Soundy"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:layout_marginStart="16dp" />
+    </LinearLayout>
+
+    <!-- Cover -->
+    <ImageView
+        android:id="@+id/imgCover"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:src="@drawable/default_cover"
+        android:background="@drawable/cover_circle"
+        android:layout_marginBottom="20dp"
+        android:elevation="4dp" />
+
+    <!-- SeekBar + Time -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:id="@+id/tv_CurrentTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00"
+            android:textColor="#CCCCCC"
+            android:textSize="13sp"
+            android:paddingEnd="8dp" />
+
+        <SeekBar
+            android:id="@+id/seek_Bar"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:progressTint="#FF9800"
+            android:thumbTint="#FF9800" />
+
+        <TextView
+            android:id="@+id/tv_Duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="04:23"
+            android:textColor="#CCCCCC"
+            android:textSize="13sp"
+            android:paddingStart="8dp" />
+    </LinearLayout>
+
+    <!-- Title + Artist -->
+    <TextView
+        android:id="@+id/tv_Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mở lối cho em"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:gravity="center"
+        android:layout_marginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/tv_Artist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lương Huy Tuấn"
+        android:textSize="15sp"
+        android:textColor="#BBBBBB"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Controls -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="12dp"
+        android:paddingHorizontal="12dp"
+        android:weightSum="5">
+
+        <ImageView
+            android:id="@+id/btn_Loop"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/ic_loop"
+            android:scaleType="centerInside"
+            android:padding="12dp"
+            android:background="@drawable/bg_icon_round"
+            android:contentDescription="Loop"
+            app:tint="#FFFFFF" />
+
+        <ImageView
+            android:id="@+id/btn_Prev"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/ic_prev"
+            android:scaleType="centerInside"
+            android:padding="12dp"
+            android:background="@drawable/bg_icon_round"
+            android:contentDescription="Prev"
+            app:tint="#FFFFFF" />
+
+        <ImageView
+            android:id="@+id/btn_Stop"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/ic_stop"
+            android:scaleType="centerInside"
+            android:padding="12dp"
+            android:background="@drawable/bg_icon_round"
+            android:contentDescription="Stop"
+            app:tint="#FF5722" />
+
+        <ImageView
+            android:id="@+id/btn_Next"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/ic_next"
+            android:scaleType="centerInside"
+            android:padding="12dp"
+            android:background="@drawable/bg_icon_round"
+            android:contentDescription="Next"
+            app:tint="#FFFFFF" />
+
+        <ImageView
+            android:id="@+id/add_playlist"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/ic_add"
+            android:scaleType="centerInside"
+            android:padding="12dp"
+            android:background="@drawable/bg_icon_round"
+            android:contentDescription="Add"
+            app:tint="#FFFFFF" />
+    </LinearLayout>
+
+</LinearLayout>
