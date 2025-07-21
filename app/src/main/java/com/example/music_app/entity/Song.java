@@ -18,6 +18,7 @@ public class Song {
 
     @Ignore
     private boolean isFavorite;
+    private String imgUrl;
 
     public boolean isFavorite() {
         return isFavorite;
@@ -32,6 +33,17 @@ public class Song {
         this.artist = artist;
         this.duration = duration;
         this.playCount = playCount;
+    }
+
+    @Ignore
+    public Song(String pathOrUrl, String title, String artist, long duration, boolean isFavorite, int playCount, String imgUrl) {
+        this.path = pathOrUrl;
+        this.title = title;
+        this.artist = artist;
+        this.duration = duration;
+        this.isFavorite = isFavorite;
+        this.playCount = playCount;
+        this.imgUrl = imgUrl;
     }
 
     @Ignore
@@ -79,6 +91,14 @@ public class Song {
 
     public void setPlayCount(int playCount) {
         this.playCount = playCount;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }
 

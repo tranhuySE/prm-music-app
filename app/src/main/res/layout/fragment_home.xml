@@ -111,6 +111,16 @@
                     android:orientation="horizontal"
                     />
             </HorizontalScrollView>
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:indeterminate="true"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_marginTop="24dp"
+                />
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

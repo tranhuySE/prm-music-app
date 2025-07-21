@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.music_app.AppDatabase;
+import com.example.music_app.ListSongFavoriteActivity;
 import com.example.music_app.LoginActivity;
 import com.example.music_app.R;
 import com.example.music_app.auth.SessionManager;
@@ -99,6 +100,14 @@ public class AccountFragment extends Fragment {
             // Thêm nút xác nhận thủ công (cách đơn giản hơn)
             dialog.setButton(AlertDialog.BUTTON_POSITIVE, "Xác nhận", (dialogInterface, which) -> {});
             dialog.show();
+        });
+
+        btnFavoriteSong.setOnClickListener(v->{
+            if (!sessionManager.isLoggedIn()) {
+                Snackbar.make(view, "Vui lòng đăng nhập", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+            startActivity(new Intent(requireContext(), ListSongFavoriteActivity.class));
         });
 
 

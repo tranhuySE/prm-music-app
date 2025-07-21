@@ -1,5 +1,6 @@
 package com.example.music_app.Adapter;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.music_app.PlayerActivity;
 import com.example.music_app.R;
 import com.example.music_app.entity.Song;
@@ -50,19 +52,28 @@ public class PlaylistSongAdapter extends RecyclerView.Adapter<PlaylistSongAdapte
         Song song = songs.get(position);
         holder.tvTitle.setText(song.getTitle());
         holder.tvArtist.setText(song.getArtist());
+        holder.tvDuration.setText(formatTime((int) song.getDuration()));
 
-        byte[] art = getAlbumArt(song.getPath());
-        if (art != null) {
-            holder.Img.setImageBitmap(android.graphics.BitmapFactory.decodeByteArray(art, 0, art.length));
+        if (song.getImgUrl() != null && !song.getImgUrl().isEmpty()) {
+            // Nếu có ảnh từ internet => dùng Glide hoặc Picasso để load ảnh
+            Glide.with(context).load(song.getImgUrl()).into(holder.Img);
         } else {
-            holder.Img.setImageResource(R.drawable.default_cover);
+            // Nếu không, dùng MediaMetadataRetriever như cũ
+            new Thread(() -> {
+                byte[] art = getAlbumArt(song.getPath());
+                if (art != null) {
+                    ((Activity) context).runOnUiThread(() -> {
+                        Glide.with(context)
+                                .asBitmap()
+                                .load(art)
+                                .placeholder(R.drawable.default_cover)
+                                .into(holder.Img);
+                    });
+                }
+            }).start();
         }
 
         // Format duration từ milliseconds sang mm:ss
-        long durationMs = song.getDuration();
-        long minutes = durationMs / 60000;
-        long seconds = (durationMs % 60000) / 1000;
-        holder.tvDuration.setText(String.format("%d:%02d", minutes, seconds));
 
         holder.btnDelete.setOnClickListener(v -> {
             if (removeListener != null) {
@@ -112,6 +123,12 @@ public class PlaylistSongAdapter extends RecyclerView.Adapter<PlaylistSongAdapte
         } catch (Exception e) {
             return null;
         }
+    }
+
+    private String formatTime(int durationSeconds) {
+        int minutes = durationSeconds / 60;
+        int seconds = durationSeconds % 60;
+        return String.format("%02d:%02d", minutes, seconds);
     }
 }
 

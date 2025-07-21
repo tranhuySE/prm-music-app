@@ -3,6 +3,7 @@ package com.example.music_app.Adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.music_app.AppDatabase;
 import com.example.music_app.DAO.SongDao;
 import com.example.music_app.DAO.SongFavoriteDao;
@@ -57,14 +59,26 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         Song song = songList.get(position);
         holder.tvTitle.setText(song.getTitle());
         holder.tvArtist.setText(song.getArtist());
-        holder.tvDuration.setText(formatTime(song.getDuration()));
+        holder.tvDuration.setText(formatTime((int) song.getDuration()));
 
         // Load ảnh cover nếu có
-        byte[] art = getAlbumArt(song.getPath());
-        if (art != null) {
-            holder.imgCover.setImageBitmap(android.graphics.BitmapFactory.decodeByteArray(art, 0, art.length));
+        if (song.getImgUrl() != null && !song.getImgUrl().isEmpty()) {
+            // Nếu có ảnh từ internet => dùng Glide hoặc Picasso để load ảnh
+            Glide.with(context).load(song.getImgUrl()).into(holder.imgCover);
         } else {
-            holder.imgCover.setImageResource(R.drawable.default_cover);
+            // Nếu không, dùng MediaMetadataRetriever như cũ
+            new Thread(() -> {
+                byte[] art = getAlbumArt(song.getPath());
+                if (art != null) {
+                    ((Activity) context).runOnUiThread(() -> {
+                        Glide.with(context)
+                                .asBitmap()
+                                .load(art)
+                                .placeholder(R.drawable.default_cover)
+                                .into(holder.imgCover);
+                    });
+                }
+            }).start();
         }
         new Thread(() -> {
             boolean isFav = favoriteDao.isFavorite(currentUser, song.getPath());
@@ -123,9 +137,9 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         }
     }
 
-    private String formatTime(long durationMillis) {
-        int minutes = (int) (durationMillis / 1000 / 60);
-        int seconds = (int) ((durationMillis / 1000) % 60);
+    private String formatTime(int durationSeconds) {
+        int minutes = durationSeconds / 60;
+        int seconds = durationSeconds % 60;
         return String.format("%02d:%02d", minutes, seconds);
     }
 

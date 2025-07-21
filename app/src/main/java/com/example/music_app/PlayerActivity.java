@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -230,7 +231,11 @@ public class PlayerActivity extends AppCompatActivity {
         }
 
         try {
-            mediaPlayer.setDataSource(songPath);
+            if (songPath.startsWith("http")) {
+                mediaPlayer.setDataSource(songPath);
+            } else {
+                mediaPlayer.setDataSource(context, Uri.parse(songPath));
+            }
             mediaPlayer.prepare();
             mediaPlayer.start();
             mediaPlayer.setOnCompletionListener(mp -> {
@@ -328,35 +333,44 @@ public class PlayerActivity extends AppCompatActivity {
     }
 
     private void displaySongImage() throws IOException {
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        try {
-            retriever.setDataSource(songPath);
-            byte[] art = retriever.getEmbeddedPicture();
-            if (art != null) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(art, 0, art.length);
-                Glide.with(this)
-                        .load(bitmap)
-                        .circleCrop()
-                        .into(imgCover);
-            } else {
-                Glide.with(this)
-                        .load(R.drawable.default_cover)
-                        .circleCrop()
-                        .into(imgCover);
-            }
+        Song currentSong = songList.get(currentIndex);
 
-            RotateAnimation rotate = new RotateAnimation(0, 360,
-                    Animation.RELATIVE_TO_SELF, 0.5f,
-                    Animation.RELATIVE_TO_SELF, 0.5f);
-            rotate.setDuration(10000);
-            rotate.setRepeatCount(Animation.INFINITE);
-            rotate.setInterpolator(new LinearInterpolator());
-            imgCover.startAnimation(rotate);
-        } catch (Exception e) {
-            imgCover.setImageResource(R.drawable.default_cover);
-        } finally {
-            retriever.release();
+        if (currentSong.getImgUrl() != null) {
+            Glide.with(this)
+                    .load(currentSong.getImgUrl())
+                    .circleCrop()
+                    .into(imgCover);
+        } else {
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            try {
+                retriever.setDataSource(songPath);
+                byte[] art = retriever.getEmbeddedPicture();
+                if (art != null) {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(art, 0, art.length);
+                    Glide.with(this)
+                            .load(bitmap)
+                            .circleCrop()
+                            .into(imgCover);
+                } else {
+                    Glide.with(this)
+                            .load(R.drawable.default_cover)
+                            .circleCrop()
+                            .into(imgCover);
+                }
+            } catch (Exception e) {
+                imgCover.setImageResource(R.drawable.default_cover);
+            } finally {
+                retriever.release();
+            }
         }
+
+        RotateAnimation rotate = new RotateAnimation(0, 360,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
+        rotate.setDuration(10000);
+        rotate.setRepeatCount(Animation.INFINITE);
+        rotate.setInterpolator(new LinearInterpolator());
+        imgCover.startAnimation(rotate);
     }
 
     private String formatTime(int millis) {

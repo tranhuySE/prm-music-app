@@ -15,6 +15,14 @@ import com.example.music_app.DAO.SongFavoriteDao;
 import com.example.music_app.auth.SessionManager;
 import com.example.music_app.entity.Song;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -90,6 +98,90 @@ public class SongUtils {
                 }
                 cursor.close();
             }
+        }
+
+        return songList;
+    }
+
+    public static List<Song> getAllSongsFromDeezer() {
+        List<Song> songList = new ArrayList<>();
+
+        try {
+            URL url = new URL("https://api.deezer.com/search?q=nhac%20tre&output=json");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.connect();
+
+            InputStream inputStream = connection.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder jsonBuilder = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                jsonBuilder.append(line);
+            }
+
+            JSONObject jsonResponse = new JSONObject(jsonBuilder.toString());
+            JSONArray dataArray = jsonResponse.getJSONArray("data");
+
+            for (int i = 0; i < dataArray.length(); i++) {
+                JSONObject item = dataArray.getJSONObject(i);
+
+                String title = item.getString("title");
+                String artist = item.getJSONObject("artist").getString("name");
+                String previewUrl = item.getString("preview"); // MP3 link
+                long duration = 30_000; // preview chỉ 30s
+
+                Song song = new Song(previewUrl, title, artist, duration, false, 0);
+                songList.add(song);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return songList;
+    }
+
+
+    public static List<Song> getAllSongsFromJamendo() {
+        List<Song> songList = new ArrayList<>();
+        String clientId = "99d59977";
+
+        try {
+            String apiUrl = "https://api.jamendo.com/v3.0/tracks/?" +
+                    "client_id=" + clientId +
+                    "&format=json&limit=20&fuzzytags=pop&audioformat=mp32";
+
+            URL url = new URL(apiUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.connect();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder jsonBuilder = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                jsonBuilder.append(line);
+            }
+
+            JSONObject jsonResponse = new JSONObject(jsonBuilder.toString());
+            JSONArray dataArray = jsonResponse.getJSONArray("results");
+
+            for (int i = 0; i < dataArray.length(); i++) {
+                JSONObject item = dataArray.getJSONObject(i);
+
+                String title = item.getString("name");
+                String artist = item.getString("artist_name");
+                String audio = item.getString("audio");
+                String image = item.getString("album_image"); // ảnh đại diện
+                int duration = item.getInt("duration");
+
+                Song song = new Song(audio, title, artist, duration, false, 0);
+                song.setImgUrl(image); // Nếu bạn có trường ảnh
+                songList.add(song);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return songList;

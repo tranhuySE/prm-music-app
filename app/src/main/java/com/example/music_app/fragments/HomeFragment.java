@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,6 +31,7 @@ public class HomeFragment extends Fragment {
 
     private LinearLayout layoutHotSongs, layoutLatestSongs,layoutFavorite;
     private List<Song> allSongs, hotSongs, newSongs,favoriteSong;
+    private ProgressBar progressBar;
     private Context context;
 
     @Nullable
@@ -43,6 +45,7 @@ public class HomeFragment extends Fragment {
         layoutHotSongs = view.findViewById(R.id.layoutHotSongs);
         layoutLatestSongs = view.findViewById(R.id.layoutLatestSongs);
         layoutFavorite = view.findViewById(R.id.layoutFavoriteSong);
+        progressBar = view.findViewById(R.id.progressBar);
         allSongs = new ArrayList<>();
 
         loadData();
@@ -51,20 +54,26 @@ public class HomeFragment extends Fragment {
     }
 
     private void loadData() {
+        progressBar.setVisibility(View.VISIBLE); // Đặt ngay khi bắt đầu
+
         new Thread(() -> {
             AppDatabase db = AppDatabase.getInstance(context);
             SongDao songDao = db.songDao();
 
-            if (songDao.getAllSongs().isEmpty()) {
-                List<Song> songsFromDevice = SongUtils.getAllSongsFromDevice(context);
-                songDao.insertAll(songsFromDevice);
-            }
-
             List<Song> songsFromDb = songDao.getAllSongs();
 
+            // Nếu chưa có thì mới lấy từ mạng hoặc thiết bị
+            if (songsFromDb.isEmpty()) {
+//                List<Song> songsFromDeezer = SongUtils.getAllSongsFromJamendo(); // Có thể chậm ở đây
+                List<Song> songsFromDeezer = SongUtils.getAllSongsFromDevice(context); // Có thể chậm ở đây
+                songDao.insertAll(songsFromDeezer);
+                songsFromDb = songsFromDeezer;
+            }
+
+            List<Song> finalSongs = songsFromDb;
             requireActivity().runOnUiThread(() -> {
                 allSongs.clear();
-                allSongs.addAll(songsFromDb);
+                allSongs.addAll(finalSongs);
 
                 hotSongs = SongUtils.getTopPlayedSongs(context);
                 newSongs = SongUtils.getLatestSongs(allSongs);
@@ -72,7 +81,9 @@ public class HomeFragment extends Fragment {
 
                 showHorizontalSongs(hotSongs, layoutHotSongs);
                 showHorizontalSongs(newSongs, layoutLatestSongs);
-                showHorizontalSongs(favoriteSong,layoutFavorite);
+                showHorizontalSongs(favoriteSong, layoutFavorite);
+
+                progressBar.setVisibility(View.GONE); // Ẩn sau khi hiển thị xong
             });
         }).start();
     }
