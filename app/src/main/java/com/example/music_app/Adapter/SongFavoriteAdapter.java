@@ -14,36 +14,29 @@ import com.example.music_app.AppDatabase;
 import com.example.music_app.R;
 import com.example.music_app.auth.SessionManager;
 import com.example.music_app.entity.Song;
-import com.example.music_app.entity.SongFavorite;
 
 import java.util.List;
 
 public class SongFavoriteAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder> {
 
-    private final List<Song> songFavorite;
+    private final List<Song> favoriteSongs;
     private final Context context;
 
-    public SongFavoriteAdapter(List<Song> songFavorite, Context context) {
-        this.songFavorite = songFavorite;
+    public SongFavoriteAdapter(List<Song> favoriteSongs, Context context) {
+        this.favoriteSongs = favoriteSongs;
         this.context = context;
     }
 
     @NonNull
     @Override
     public SongAdapter.SongViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_song_play_list, parent, false);
-        return new SongAdapter.SongViewHolder(view);
-    }
-
-    public void updateList(List<Song> newList) {
-        this.songFavorite.clear();
-        this.songFavorite.addAll(newList);
-        notifyDataSetChanged();
+        View itemView = LayoutInflater.from(context).inflate(R.layout.item_song_play_list, parent, false);
+        return new SongAdapter.SongViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull SongAdapter.SongViewHolder holder, int position) {
-        Song song = songFavorite.get(position);
+        Song song = favoriteSongs.get(position);
 
         holder.tvTitle.setText(song.getTitle());
         holder.tvArtist.setText(song.getArtist());
@@ -54,34 +47,31 @@ public class SongFavoriteAdapter extends RecyclerView.Adapter<SongAdapter.SongVi
                 .placeholder(R.drawable.default_cover)
                 .into(holder.imgCover);
 
-        // Luôn gắn icon yêu thích
         holder.imgFavorite.setImageResource(R.drawable.ic_favorite_outline);
 
-        // Bấm để BỎ yêu thích
         holder.imgFavorite.setOnClickListener(v -> {
-            SessionManager sessionManager = new SessionManager(context);
-            String currentUser = sessionManager.getUsername();
+            String username = new SessionManager(context).getUsername();
 
             AppDatabase.getInstance(context).songFavoriteDao()
-                    .deleteByUsernameAndPath(currentUser, song.getPath());
+                    .deleteByUsernameAndPath(username, song.getPath());
 
-            // Xóa khỏi danh sách và cập nhật UI
-            int removedIndex = holder.getAdapterPosition();
-            songFavorite.remove(removedIndex);
-            notifyItemRemoved(removedIndex);
-
-            Toast.makeText(context, "Đã bỏ yêu thích", Toast.LENGTH_SHORT).show();
+            int removedPosition = holder.getAdapterPosition();
+            if (removedPosition != RecyclerView.NO_POSITION) {
+                favoriteSongs.remove(removedPosition);
+                notifyItemRemoved(removedPosition);
+                Toast.makeText(context, "Đã bỏ yêu thích", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
     @Override
     public int getItemCount() {
-        return songFavorite != null ? songFavorite.size() : 0;
+        return favoriteSongs != null ? favoriteSongs.size() : 0;
     }
 
-    private String formatTime(int durationSeconds) {
-        int minutes = durationSeconds / 60;
-        int seconds = durationSeconds % 60;
+    private String formatTime(int durationInSeconds) {
+        int minutes = durationInSeconds / 60;
+        int seconds = durationInSeconds % 60;
         return String.format("%02d:%02d", minutes, seconds);
     }
 }
