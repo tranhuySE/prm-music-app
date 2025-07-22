@@ -8,104 +8,120 @@
     android:padding="16dp"
     tools:context=".LoginActivity"
     android:background="@color/main_bg">
-    
+
     <!-- Tiêu đề Đăng ký -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/dang_ki"
-        android:layout_above="@+id/lnLogin"
         android:layout_centerHorizontal="true"
         android:textStyle="bold"
-        android:textSize="40dp"
+        android:textSize="32sp"
         android:padding="10dp"
-        android:layout_margin="10dp"
-        android:textColor="@color/black"
-        />
+        android:layout_marginTop="24dp"
+        android:textColor="@color/black" />
 
-    <!-- Khối chứa form đăng ký -->
-    <LinearLayout
-        android:id="@+id/lnLogin"
+    <!-- ScrollView bọc form đăng ký -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        >
-
-        <!-- Ô nhập tên đăng nhập -->
-
-        <EditText
-            android:id="@+id/edt_Username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/ten_dang_nhap"
-            android:padding="20dp"
-            android:textColorHint="@color/black"
-            android:background="@color/input"/>
-
-        <!-- Ô nhập mật khẩu -->
-        <EditText
-            android:id="@+id/edt_Password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/mat_khau"
-            android:padding="20dp"
-            android:password="true"
-            android:textColorHint="@color/black"
-            android:layout_marginTop="10dp"
-            android:background="@color/input"/>
-        <!-- Ô xác nhận mật khẩu -->
-
-        <EditText
-            android:id="@+id/edt_Confirm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/xac_nhan_mat_khau"
-            android:padding="20dp"
-            android:password="true"
-            android:textColorHint="@color/black"
-            android:layout_marginTop="10dp"
-            android:background="@color/input"/>
-
-
-
-
+        android:layout_height="match_parent"
+        android:layout_below="@+id/main"
+        android:fillViewport="true">
 
         <LinearLayout
+            android:id="@+id/lnLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-      
-      
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:background="@drawable/bg_form"
+            android:padding="24dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginBottom="24dp">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_RegisterBack"
+            <!-- Ô nhập tên đăng nhập -->
+            <EditText
+                android:id="@+id/edt_Username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/ten_dang_nhap"
+                android:padding="16dp"
+                android:textColorHint="@color/black"
+                android:background="@color/input"
+                android:drawableStart="@drawable/ic_user"
+                android:drawablePadding="10dp" />
+
+            <!-- Ô nhập mật khẩu -->
+            <EditText
+                android:id="@+id/edt_Password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/mat_khau"
+                android:padding="16dp"
+                android:inputType="textPassword"
+                android:textColorHint="@color/black"
+                android:layout_marginTop="12dp"
+                android:background="@color/input"
+                android:drawableStart="@drawable/ic_lock"
+                android:drawablePadding="10dp" />
+
+            <!-- Ô xác nhận mật khẩu -->
+            <EditText
+                android:id="@+id/edt_Confirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/xac_nhan_mat_khau"
+                android:padding="16dp"
+                android:inputType="textPassword"
+                android:textColorHint="@color/black"
+                android:layout_marginTop="12dp"
+                android:background="@color/input"
+                android:drawableStart="@drawable/ic_lock"
+                android:drawablePadding="10dp" />
+
+            <!-- Checkbox hiện mật khẩu -->
+            <CheckBox
+                android:id="@+id/checkbox_show_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/back_toLogin"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:backgroundTint="@color/btn"
-                android:textColor="@color/black"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="10dp"
-                app:cornerRadius="0dp"/>
-            <!-- Nút Đăng ký -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_Register"
-                android:layout_width="wrap_content"
+                android:text="Hiện mật khẩu"
+                android:layout_marginTop="8dp" />
+
+            <!-- Dòng chứa nút Quay lại và Đăng ký -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/dang_ki"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:textColor="@color/black"
-                android:backgroundTint="@color/btn"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                app:cornerRadius="0dp"/>
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp">
+
+                <!-- Nút Quay lại đăng nhập -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_RegisterBack"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="@string/back_toLogin"
+                    android:padding="10dp"
+                    android:backgroundTint="@color/btn"
+                    android:textColor="@color/black"
+                    app:cornerRadius="8dp"
+                    android:layout_marginEnd="8dp" />
+
+                <!-- Nút Đăng ký -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_Register"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="@string/dang_ki"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:backgroundTint="@color/btn"
+                    app:cornerRadius="8dp"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+
         </LinearLayout>
-
-    </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>
