@@ -35,6 +35,12 @@ public class SongFavoriteAdapter extends RecyclerView.Adapter<SongAdapter.SongVi
         return new SongAdapter.SongViewHolder(view);
     }
 
+    public void updateList(List<Song> newList) {
+        this.songFavorite.clear();
+        this.songFavorite.addAll(newList);
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(@NonNull SongAdapter.SongViewHolder holder, int position) {
         Song song = songFavorite.get(position);
