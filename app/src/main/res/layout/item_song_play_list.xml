@@ -14,7 +14,8 @@
         android:scaleType="centerCrop"
         android:src="@drawable/default_cover"
         android:background="@drawable/cover_circle"
-        android:layout_marginEnd="10dp" />
+        android:layout_marginEnd="10dp"
+        android:contentDescription="Ảnh bìa bài hát" />
 
     <!-- Nội dung bài hát -->
     <LinearLayout
@@ -25,7 +26,7 @@
 
         <!-- Tiêu đề -->
         <TextView
-            android:id="@+id/tv_Title"
+            android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
@@ -37,7 +38,7 @@
 
         <!-- Nghệ sĩ -->
         <TextView
-            android:id="@+id/tv_Artist"
+            android:id="@+id/tvArtist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
@@ -48,7 +49,7 @@
 
         <!-- Thời lượng -->
         <TextView
-            android:id="@+id/tv_Duration"
+            android:id="@+id/tvDuration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="4:23"
@@ -56,11 +57,20 @@
             android:textColor="@android:color/black" />
     </LinearLayout>
 
-    <!-- Icon yêu thích -->
+    <!-- Icon xóa khỏi playlist -->
     <ImageView
-        android:id="@+id/btn_delete"
+        android:id="@+id/btnDelete"
         android:layout_width="44dp"
         android:layout_height="44dp"
         android:src="@drawable/ic_delete"
-        android:layout_marginStart="8dp" />
+        android:layout_marginStart="8dp"
+        android:contentDescription="Xóa khỏi playlist" />
+    <!-- Nút chia sẻ bài hát -->
+    <ImageView
+        android:id="@+id/imgShare"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:src="@drawable/ic_share"
+        android:layout_marginStart="8dp"
+        android:contentDescription="Chia sẻ bài hát" />
 </LinearLayout>

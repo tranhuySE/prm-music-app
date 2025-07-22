@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -116,6 +117,11 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
             intent.putExtra("current_index", position);
             context.startActivity(intent);
         });
+
+        // Thêm xử lý nút chia sẻ
+        holder.imgShare.setOnClickListener(v -> {
+            shareSong(context, song);
+        });
     }
 
     @Override
@@ -125,15 +131,16 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
 
     public static class SongViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle, tvArtist, tvDuration;
-        ImageView imgCover, imgFavorite;
+        ImageView imgCover, imgFavorite, imgShare;
 
         public SongViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvTitle = itemView.findViewById(R.id.tv_Title);
-            tvArtist = itemView.findViewById(R.id.tv_Artist);
-            tvDuration = itemView.findViewById(R.id.tv_Duration);
+            tvTitle = itemView.findViewById(R.id.tvTitle);
+            tvArtist = itemView.findViewById(R.id.tvArtist);
+            tvDuration = itemView.findViewById(R.id.tvDuration);
             imgCover = itemView.findViewById(R.id.imgCover);
             imgFavorite = itemView.findViewById(R.id.imgFavorite);
+            imgShare = itemView.findViewById(R.id.imgShare); // Thêm ImageView chia sẻ vào layout item_song
         }
     }
 
@@ -153,5 +160,13 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         } catch (Exception e) {
             return null;
         }
+    }
+
+    private void shareSong(Context context, Song song) {
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "Nghe bài hát: " + song.getTitle() + " - " + song.getArtist());
+        shareIntent.setType("text/plain");
+        context.startActivity(Intent.createChooser(shareIntent, "Chia sẻ bài hát qua"));
     }
 }

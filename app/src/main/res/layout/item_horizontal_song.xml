@@ -11,7 +11,8 @@
         android:layout_height="100dp"
         android:scaleType="centerCrop"
         android:src="@drawable/default_cover"
-        android:background="@android:color/darker_gray" />
+        android:background="@android:color/darker_gray"
+        android:contentDescription="Ảnh bìa bài hát" />
 
     <TextView
         android:id="@+id/tvTitle"
